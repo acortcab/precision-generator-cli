@@ -6,14 +6,17 @@ var define ={};
 const pluginMaven = 'archetype:generate';
 var counter;
 
-this.askEverything=function (){
+this.inialize=function (){
     define['archetypeGroupId'] = 'precisionsoftware';
     define['archetypeVersion'] = '0.0.1-SNAPSHOT';
     define['artifactId'] = 'te';
     define['groupId'] = 'com.qad.gtte';
     define['version'] = '1.0-SNAPSHOT';
     counter = 1;
+}
 
+this.askEverything=function (){
+    ask.inialize();
 
     const inquirer = require('inquirer');
     option = null;
@@ -31,26 +34,24 @@ this.askEverything=function (){
         switch (answers.action){
             case 'repository':
                 ask.askQuestionsRepository();
-                option = 'project';
-                return option;
+                return;
             case 'domain':
                 ask.askQuestionsDomain();
-                option = 'module';
-                return option;
+                return;
             case 'form':
                 ask.askQuestionsForm();
-                option = 'feature';
-                return option;
+                return;
             case 'validator':
                 ask.askQuestionsValidator();
-                option = 'feature';
-                return option;
+                return;
         }
         
       });
 }
 
 this.askQuestionsRepository=function (){
+    ask.inialize();
+
     const inquirer = require('inquirer');
 
     inquirer
@@ -87,6 +88,8 @@ this.askQuestionsRepository=function (){
 }
 
 this.askQuestionsDomain=function (){
+  ask.inialize();
+
   const inquirer = require('inquirer');
   define['archetypeArtifactId'] = 'precision.generator.entity';
 
@@ -158,6 +161,8 @@ this.askQuestionsColumns=function (project){
 }
 
 this.askQuestionsForm=function (project){
+    ask.inialize();
+
     const inquirer = require('inquirer');
 
     inquirer
@@ -205,7 +210,7 @@ this.askQuestionsFormsField=function (project){
       }
       ])
       .then(answers => {
-            define['fieldName' + counter] = answers.columnName;
+            define['fieldName' + counter] = answers.fieldName;
             define['typeField' + counter] = answers.typeField;
             if(answers.confirmation == true ){
                 counter++;
@@ -217,6 +222,8 @@ this.askQuestionsFormsField=function (project){
 }
 
 this.askQuestionsValidator=function (project){
+    ask.inialize();
+
     const inquirer = require('inquirer');
 
     inquirer
@@ -258,7 +265,7 @@ this.executeFeature=function (){
     mvn.execute([pluginMaven +':feature']);
 }
 
-this.askMore=function (option){
+this.askMore=function (){
   const inquirer = require('inquirer');
 
   inquirer
@@ -266,7 +273,7 @@ this.askMore=function (option){
       {
           type: 'confirm',
           name: 'confirmation',
-          message: 'Would you like to create anything else'?',
+          message: 'Would you like to create anything else?',
           default: false
       }
     ])
@@ -277,6 +284,5 @@ this.askMore=function (option){
         }else{
           return;
         }
-      }
     });
 }

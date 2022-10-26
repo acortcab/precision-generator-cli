@@ -3,6 +3,9 @@ myVar= process.argv[2];
 ask = require("./ask.js");
 const chalk = require('chalk');
 const figlet = require('figlet');
+const fs = require('fs-extra')
+// directory to check if exists
+const dir = './te'
 
 console.log(
     chalk.yellow(
@@ -22,39 +25,29 @@ console.log(
     )
   );   
 
+// check if directory exists
+if (fs.existsSync(dir)) {
+  fs.removeSync(dir); 
+}
+
 if(!process.argv[2]) {
     ask.askEverything();
 }else {   
     var command = process.argv[2]; 
     
     switch (command){
-        case 'boot':
-            ask.askQuestionProject('boot');
+        case 'repository':
+            ask.askQuestionsRepository('boot');
             break;
-        case 'web':
-            ask.askQuestionProject('web');
+        case 'domain':
+            ask.askQuestionsDomain('web');
             break;            
-        case 'micros-application':
-            ask.askQuestionProject('micros-application');
+        case 'form':
+            ask.askQuestionsForm('micros-application');
             break;
-        case 'micros-infrastructure':
-            ask.askQuestionProject('micros-infrastructure');
-            break;
-        case 'web-module':
-            ask.askQuestionModuleName('web-module');
-            break;    
-        case 'common-module':
-            ask.askQuestionModuleName('common-module');
-            break; 
-        case 'core-module':
-            ask.askQuestionModuleName('core-module');
-            break; 
-        case 'module':
-            ask.askQuestionModule();
-            break; 
-        case 'feature':
-            ask.executeFeature();
-            break;                                                                                          
+        case 'validator':
+            ask.askQuestionsValidator('micros-infrastructure');
+            break;                                                                                         
         default:
             console.log('Not valid action !!!');
     }
