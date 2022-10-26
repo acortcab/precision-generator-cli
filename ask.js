@@ -7,7 +7,7 @@ const pluginMaven = 'archetype:generate';
 var counter;
 
 this.inialize=function (){
-    define['archetypeGroupId'] = 'precisionsoftware';
+    define['archetypeGroupId'] = 'precisionsoftware.maven.archetype';
     define['archetypeVersion'] = '0.0.1-SNAPSHOT';
     define['artifactId'] = 'te';
     define['groupId'] = 'com.qad.gtte';
