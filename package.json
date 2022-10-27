@@ -9,11 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "args": "^5.0.3",
     "chalk": "^2.4.2",
     "figlet": "^1.5.2",
     "fs-extra": "^10.1.0",
     "maven": "^4.7.0",
-    "recursive-copy": "^2.0.10"
+    "recursive-copy": "^2.0.10",
+    "yargs": "^17.6.0"
   },
   "bin": {
     "ge": "./index.js"

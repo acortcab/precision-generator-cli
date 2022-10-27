@@ -5,18 +5,23 @@ const mvn = require('maven').create({'settings':fileSettings});
 var define ={};
 const pluginMaven = 'archetype:generate';
 var counter;
+var initial = false;
 
-this.inialize=function (){
-    define['archetypeGroupId'] = 'precisionsoftware.maven.archetype';
+this.inialize=function (activeDebug){
+    define['archetypeGroupId'] = 'precisionsoftware';
     define['archetypeVersion'] = '0.0.1-SNAPSHOT';
     define['artifactId'] = 'te';
-    define['groupId'] = 'com.qad.gtte';
     define['version'] = '1.0-SNAPSHOT';
+    define['interactiveMode'] = 'false';
+    if(activeDebug != null && (activeDebug == '-d' || activeDebug == '--debug')){
+        define['interactiveMode'] = 'true';
+    }
     counter = 1;
+    initial = true;
 }
 
-this.askEverything=function (){
-    ask.inialize();
+this.askEverything=function (activeDebug){
+    ask.inialize(activeDebug);
 
     const inquirer = require('inquirer');
     option = null;
@@ -25,32 +30,34 @@ this.askEverything=function (){
         {
             type: 'list',
             name: 'action',
-            message: 'What would like to do?',
-            choices: ['repository', 'domain', 'form', 'validator'],
+            message: 'What would like to create?',
+            choices: ['repository', 'entity', 'form', 'validator'],
         }
       ])
       .then(answers => {
         
         switch (answers.action){
             case 'repository':
-                ask.askQuestionsRepository();
+                ask.askQuestionsRepository(activeDebug);
                 return;
-            case 'domain':
-                ask.askQuestionsDomain();
+            case 'entity':
+                ask.askQuestionsEntity(activeDebug);
                 return;
             case 'form':
-                ask.askQuestionsForm();
+                ask.askQuestionsForm(activeDebug);
                 return;
             case 'validator':
-                ask.askQuestionsValidator();
+                ask.askQuestionsValidator(activeDebug);
                 return;
         }
         
       });
 }
 
-this.askQuestionsRepository=function (){
-    ask.inialize();
+this.askQuestionsRepository=function (activeDebug){
+    if(!initial){
+        ask.inialize(activeDebug);
+    }
 
     const inquirer = require('inquirer');
 
@@ -59,7 +66,7 @@ this.askQuestionsRepository=function (){
         {
           name: 'packageInPathFormat',
           message: 'Which package you want to locate the class?',
-          default: 'com.qad.gtte',
+          default: 'com.qad.gtte.te',
         },
 	    {
           name: 'className',
@@ -78,8 +85,8 @@ this.askQuestionsRepository=function (){
         },
       ])
       .then(answers => {
-	        define['archetypeArtifactId'] = 'precision.generator.repository';
-            define['packageInPathFormat'] = answers.packageInPathFormat;
+	        define['archetypeArtifactId'] = 'precision-generator-repository';
+            define['groupId'] = answers.packageInPathFormat;
             define['className'] = answers.className;
             define['classObject'] = answers.classObject;
             define['classId'] = answers.classId;
@@ -87,11 +94,13 @@ this.askQuestionsRepository=function (){
       });
 }
 
-this.askQuestionsDomain=function (){
-  ask.inialize();
+this.askQuestionsEntity=function (activeDebug){
+  if(!initial){
+     ask.inialize(activeDebug);
+  }
 
   const inquirer = require('inquirer');
-  define['archetypeArtifactId'] = 'precision.generator.entity';
+  define['archetypeArtifactId'] = 'precision-generator-entity';
 
     inquirer
       .prompt([
@@ -112,14 +121,14 @@ this.askQuestionsDomain=function (){
         }
       ])
       .then(answers => {
-            define['packageInPathFormat'] = answers.packageInPathFormat;
+            define['groupId'] = answers.packageInPathFormat;
             define['className'] = answers.className;
             define['tableName'] = answers.tableName;
             ask.askQuestionsColumns();
       });
 }
 
-this.askQuestionsColumns=function (project){
+this.askQuestionsColumns=function (){
     const inquirer = require('inquirer');
 
     inquirer
@@ -160,8 +169,10 @@ this.askQuestionsColumns=function (project){
       });
 }
 
-this.askQuestionsForm=function (project){
-    ask.inialize();
+this.askQuestionsForm=function (activeDebug){
+    if(!initial){
+      ask.inialize(activeDebug);
+    }
 
     const inquirer = require('inquirer');
 
@@ -170,7 +181,7 @@ this.askQuestionsForm=function (project){
         {
           name: 'packageInPathFormat',
           message: 'Which package you want to locate the class?',
-          default: 'com.qad.gtte',
+          default: 'com.qad.gtte.te',
         },
 	    {
           name: 'className',
@@ -179,14 +190,14 @@ this.askQuestionsForm=function (project){
         }
       ])
       .then(answers => {
-            define['archetypeArtifactId'] = 'precision.generator.form';
-            define['packageInPathFormat'] = answers.packageInPathFormat;
+            define['archetypeArtifactId'] = 'precision-generator-form';
+            define['groupId'] = answers.packageInPathFormat;
             define['className'] = answers.className;
             ask.askQuestionsFormsField();
       });
 }
 
-this.askQuestionsFormsField=function (project){
+this.askQuestionsFormsField=function (){
     const inquirer = require('inquirer');
 
     inquirer
@@ -221,8 +232,10 @@ this.askQuestionsFormsField=function (project){
       });
 }
 
-this.askQuestionsValidator=function (project){
-    ask.inialize();
+this.askQuestionsValidator=function (activeDebug){
+    if(!initial){
+       ask.inialize(activeDebug);
+    }
 
     const inquirer = require('inquirer');
 
@@ -231,7 +244,7 @@ this.askQuestionsValidator=function (project){
         {
           name: 'packageInPathFormat',
           message: 'Which package you want to locate the class?',
-          default: 'com.qad.gtte',
+          default: 'com.qad.gtte.te',
         },
 	    {
           name: 'className',
@@ -250,8 +263,8 @@ this.askQuestionsValidator=function (project){
         },
       ])
       .then(answers => {
-            define['archetypeArtifactId'] = 'precision.generator.validator';
-            define['packageInPathFormat'] = answers.packageInPathFormat;
+            define['archetypeArtifactId'] = 'precision-generator-validator';
+            define['groupId'] = answers.packageInPathFormat;
             define['className'] = answers.className;
             define['contraintName'] = answers.contraintName;
             define['formName'] = answers.formName;
