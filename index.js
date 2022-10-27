@@ -5,11 +5,11 @@ const chalk = require('chalk');
 const figlet = require('figlet');
 const fs = require('fs-extra')
 // directory to check if exists
-const dir = './te'
+const dir = './generated'
 
 console.log(
     chalk.yellow(
-      figlet.textSync(' -------', { horizontalLayout: 'full' })
+      figlet.textSync(' ------------', { horizontalLayout: 'full' })
     )
   ); 
 
@@ -21,7 +21,7 @@ console.log(
 
   console.log(
     chalk.yellow(
-      figlet.textSync(' -------', { horizontalLayout: 'full' })
+      figlet.textSync(' ------------', { horizontalLayout: 'full' })
     )
   );   
 

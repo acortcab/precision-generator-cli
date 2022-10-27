@@ -1,11 +1,15 @@
 #! /usr/bin/env node
 const path = require('path');
+const fs = require('fs-extra')
 const fileSettings = 'C:\\\maven\\apache-maven-3.8.6\\conf\\settings.xml';
 const mvn = require('maven').create({'settings':fileSettings});
 var define ={};
 const pluginMaven = 'archetype:generate';
 var counter;
 var initial = false;
+// directory to check if exists
+const dirOld = './te'
+const dirGenerated = './generated'
 
 this.inialize=function (activeDebug){
     define['archetypeGroupId'] = 'precisionsoftware';
@@ -90,7 +94,9 @@ this.askQuestionsRepository=function (activeDebug){
             define['className'] = answers.className;
             define['classObject'] = answers.classObject;
             define['classId'] = answers.classId;
-            mvn.execute(pluginMaven, define);
+            mvn.execute(pluginMaven, define).then(() => {
+                ask.moveContent();
+             });
       });
 }
 
@@ -164,7 +170,9 @@ this.askQuestionsColumns=function (){
                 counter++;
                 ask.askQuestionsColumns();
             }else{
-                mvn.execute(pluginMaven, define);
+                mvn.execute(pluginMaven, define).then(() => {
+                    ask.moveContent();
+                });
             }
       });
 }
@@ -227,7 +235,9 @@ this.askQuestionsFormsField=function (){
                 counter++;
                 ask.askQuestionsFormsField();
             }else{
-                mvn.execute(pluginMaven, define);
+                mvn.execute(pluginMaven, define).then(() => {
+                    ask.moveContent();
+                });
             }
       });
 }
@@ -268,14 +278,20 @@ this.askQuestionsValidator=function (activeDebug){
             define['className'] = answers.className;
             define['contraintName'] = answers.contraintName;
             define['formName'] = answers.formName;
-            mvn.execute(pluginMaven, define);
+            mvn.execute(pluginMaven, define).then(() => {
+                ask.moveContent();
+            });
       });
 }
 
 
 
-this.executeFeature=function (){
-    mvn.execute([pluginMaven +':feature']);
+this.moveContent=function (){
+    // check if directory exists
+    if (fs.existsSync(dirOld)) {
+        fs.removeSync(dirOld + '/pom.xml')
+        fs.renameSync(dirOld , dirGenerated); 
+    }
 }
 
 this.askMore=function (){
